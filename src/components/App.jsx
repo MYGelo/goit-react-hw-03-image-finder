@@ -13,6 +13,8 @@ export class App extends Component {
   };
 
   render() {
+    console.log(API);
+
     return (
       <>
         <ImageGallery>
