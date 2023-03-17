@@ -1,15 +1,25 @@
-<header class="searchbar">
-  <form class="form">
-    <button type="submit" class="button">
-      <span class="button-label">Search</span>
-    </button>
+import { Component } from 'react';
 
-    <input
-      class="input"
-      type="text"
-      autocomplete="off"
-      autofocus
-      placeholder="Search images and photos"
-    />
-  </form>
-</header>;
+import css from './Searchbar.module.css';
+
+export class Searchbar extends Component {
+  render() {
+    return (
+      <header className={css.search__bar}>
+        <form className={css.search__form}>
+          <button type="submit" className={css.searchFormBtn}>
+            <span className={css.searchForm__buttonLabel}>Search</span>
+          </button>
+
+          <input
+            className={css.searchForm__input}
+            type="text"
+            autocomplete="off"
+            autofocus
+            placeholder="Search images and photos"
+          />
+        </form>
+      </header>
+    );
+  }
+}
