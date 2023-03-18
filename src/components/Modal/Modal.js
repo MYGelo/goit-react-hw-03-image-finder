@@ -1,26 +1,41 @@
-import { Component } from 'react';
 import css from './Modal.module.css';
-import axios from 'axios';
+import PropTypes from 'prop-types';
+import { Component } from 'react';
+import { createPortal } from 'react-dom';
+
+const modalRoot = document.querySelector('#modal_root');
 
 export class Modal extends Component {
-  state = {
-    images: [],
-  };
-  async componentDidMount() {
-    const response = await axios.get('/search?query=react');
-    this.setState({ images: response.data.hits });
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
   }
-  render() {
-    const { images } = this.state;
 
-    return (
-      <div className={css.Overlay}>
-        <div className={css.Modal}>
-          {images.map(({ largeImageURL }) => (
-            <img src={largeImageURL} alt="" />
-          ))}
-        </div>
-      </div>
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = e => {
+    if (e.code === 'Escape') {
+      this.props.onClose();
+    }
+  };
+
+  handleBackdrop = e => {
+    if (e.currentTarget === e.target) {
+      this.props.onClose();
+    }
+  };
+
+  render() {
+    return createPortal(
+      <div className={css.modal__backdrop} onClick={this.handleBackdrop}>
+        <div className={css.modal__content}>{this.props.children}</div>
+      </div>,
+      modalRoot
     );
   }
 }
+Modal.propTypes = {
+  children: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
