@@ -14,13 +14,3 @@ export const Btn = ({ onClick }) => (
 Btn.propTypes = {
   onClick: PropTypes.func.isRequired,
 };
-
-// export class Button extends Component {
-//   render() {
-//     return (
-//       <button className={css.button} type="Button">
-//         Load More
-//       </button>
-//     );
-//   }
-// }

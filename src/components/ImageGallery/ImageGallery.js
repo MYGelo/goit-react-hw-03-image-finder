@@ -1,13 +1,12 @@
 import { fetchImages } from 'components/Api/Api';
 import { Btn } from 'components/Button/Button';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import { Loader } from 'components/Loader/Loader';
 import { Modal } from 'components/Modal/Modal';
 import { Component } from 'react';
 import css from './imageGallery.module.css';
-// import { Button } from './Button/Button';
-// export const ImageGallery = ({ title, children }) => {
-//   return <ul className={css.ImageGallery}>{children}</ul>;
-// };
+
+import { GoX } from 'react-icons/go';
 
 export class ImageGallery extends Component {
   state = {
@@ -21,12 +20,16 @@ export class ImageGallery extends Component {
     imgAlt: '',
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     const prevSearch = prevProps.inputSearch;
     const currentSearch = this.props.inputSearch;
+    // console.log(this.state);
 
     if (prevSearch !== currentSearch) {
-      this.setState({ status: 'pending', inputSearch: currentSearch });
+      this.setState({
+        status: 'pending',
+        inputSearch: currentSearch,
+      });
       fetchImages(currentSearch, 1)
         .then(images => this.setState({ images, status: 'resoloved' }))
         .catch(error => this.setState({ error, status: 'rejected' }));
@@ -42,39 +45,74 @@ export class ImageGallery extends Component {
     });
   };
 
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  onOpenModal = e => {
+    // console.log(e.target.alt);
+    this.setState({
+      showModal: true,
+      imgSrc: e.target.name,
+      imgAlt: e.target.alt,
+    });
+  };
+
+  onCloseModal = e => {
+    e.stopPropagation();
+    this.setState({
+      showModal: false,
+      imgSrc: '',
+      imgAlt: '',
+    });
+  };
+
   render() {
     const { images, error, status, showModal, imgSrc, imgAlt } = this.state;
 
-    return (
-      <div className={css.wrapper}>
-        <ul className={css.ImageGallery}>
-          {images.map((image, index) => (
-            <ImageGalleryItem
-              image={image}
-              key={index}
-              onClick={this.onOpenModal}
-            />
-          ))}
-        </ul>
-        {images.length > 0 ? (
-          <Btn onClick={this.onClickMore} />
-        ) : (
-          <p>No images found</p>
-        )}
-        {showModal && (
-          <Modal onClose={this.toggleModal}>
-            <button
-              className={css.closeBtn}
-              type="button"
-              onClick={this.onCloseModal}
-            >
-              Close
-            </button>
-            <img className={css.modal__img} src={imgSrc} alt={imgAlt} />
-            <p className={css.modal__text}>{imgAlt}</p>
-          </Modal>
-        )}
-      </div>
-    );
+    if (status === 'rejected') {
+      return <p>{error}</p>;
+    }
+
+    if (status === 'pending') {
+      return <Loader />;
+    }
+
+    if (status === 'resoloved') {
+      return (
+        <div className={css.wrapper}>
+          <ul className={css.ImageGallery}>
+            {images.map((image, index) => (
+              <ImageGalleryItem
+                image={image}
+                key={index}
+                onClick={this.onOpenModal}
+              />
+            ))}
+          </ul>
+          {images.length > 0 ? (
+            <Btn onClick={this.onClickMore} />
+          ) : (
+            <p style={{ textAlign: 'center' }}>No images found</p>
+          )}
+          {showModal && (
+            <div>
+              <Modal onClose={this.toggleModal}>
+                <button
+                  className={css.closeBtn}
+                  type="button"
+                  onClick={this.onCloseModal}
+                >
+                  <GoX viewBox="-1 0 14 14"></GoX>
+                </button>
+                <img className={css.modal__img} src={imgSrc} alt={imgAlt} />
+              </Modal>
+            </div>
+          )}
+        </div>
+      );
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import css from './Searchbar.module.css';
+import { HiMagnifyingGlass } from 'react-icons/hi2';
 
 export class Searchbar extends Component {
   state = {
@@ -16,8 +17,8 @@ export class Searchbar extends Component {
       alert('Write correct word');
       return;
     } else {
-      this.props.onSubmit(this.state.inputSearch);
       this.reset();
+      this.props.onSubmit(this.state.inputSearch);
     }
     e.target.reset();
   };
@@ -32,6 +33,7 @@ export class Searchbar extends Component {
         <form className={css.search__form} onSubmit={this.handleSubmit}>
           <button type="submit" className={css.searchFormBtn}>
             <span className={css.searchForm__buttonLabel}>Search</span>
+            <HiMagnifyingGlass></HiMagnifyingGlass>
           </button>
 
           <input
