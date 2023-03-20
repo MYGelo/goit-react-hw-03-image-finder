@@ -13,7 +13,7 @@ export class App extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <Searchbar onSubmit={this.handleSearchSubmit} />
         <div
           style={{
@@ -24,7 +24,7 @@ export class App extends Component {
         >
           <ImageGallery inputSearch={this.state.inputSearch} />
         </div>
-      </div>
+      </>
     );
   }
 }

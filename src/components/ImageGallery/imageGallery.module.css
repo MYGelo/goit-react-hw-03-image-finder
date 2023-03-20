@@ -15,5 +15,11 @@
 }
 
 .closeBtn {
-  transform: translate(10px, 50px);
+  display: none;
+}
+
+.modal__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

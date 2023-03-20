@@ -6,8 +6,6 @@ import { Modal } from 'components/Modal/Modal';
 import { Component } from 'react';
 import css from './imageGallery.module.css';
 
-import { GoX } from 'react-icons/go';
-
 export class ImageGallery extends Component {
   state = {
     inputSearch: '',
@@ -104,9 +102,7 @@ export class ImageGallery extends Component {
                   className={css.closeBtn}
                   type="button"
                   onClick={this.onCloseModal}
-                >
-                  <GoX viewBox="-1 0 14 14"></GoX>
-                </button>
+                ></button>
                 <img className={css.modal__img} src={imgSrc} alt={imgAlt} />
               </Modal>
             </div>

@@ -27,11 +27,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-img {
+/* img {
   display: block;
   max-width: 100%;
   height: auto;
-}
+} */
 
 /*
  * Стили компонента App
