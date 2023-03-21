@@ -15,35 +15,31 @@ export class App extends Component {
     error: null,
     isLoading: false,
     images: [],
-    pageNr: 1,
+    page: 1,
     showModal: false,
     imgSrc: '',
     imgAlt: '',
   };
-  async componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyPress);
-  }
 
   async componentDidUpdate(prevProps, prevState) {
-    const prevSearch = prevState.inputSearch;
-    const currentSearch = this.state.inputSearch;
-
-    if (prevSearch !== currentSearch) {
-      this.setState({
-        inputSearch: currentSearch,
-      });
-      fetchImages(currentSearch, 1)
-        .then(images => this.setState({ images, isLoading: false }))
+    if (
+      prevState.inputSearch !== this.state.inputSearch ||
+      prevState.page !== this.state.page
+    ) {
+      fetchImages(this.state.inputSearch, this.state.page)
+        .then(images => {
+          this.setState({
+            images: [...prevState.images, ...images],
+            isLoading: false,
+          });
+        })
         .catch(error => this.setState({ error }));
     }
   }
+
   onClickMore = async () => {
-    const { inputSearch, pageNr, images } = this.state;
-    const response = await fetchImages(inputSearch, pageNr + 1);
-    this.setState({
-      images: [...images, ...response],
-      PageNr: pageNr + 1,
-    });
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+    // this.setState({ page: this.state.page + 1 });
   };
 
   handleSearchSubmit = inputSearch => {
@@ -71,13 +67,6 @@ export class App extends Component {
     this.setState({
       showModal: false,
     });
-  };
-
-  handleKeyPress = event => {
-    // console.log(event.key);
-    if (event.key === 'Escape') {
-      this.onCloseModal();
-    }
   };
 
   render() {

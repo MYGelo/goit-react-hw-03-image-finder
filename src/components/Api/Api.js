@@ -2,11 +2,11 @@ import axios from 'axios';
 
 axios.defaults.baseURL = `https://pixabay.com/api`;
 
-export const fetchImages = async (inputValue, pageNr) => {
+export const fetchImages = async (inputValue, page) => {
   try {
     const key = '33413871-83de45d798729799c18dcdbf3';
     const response = await axios.get(
-      `/?q=${inputValue}&page=${pageNr}&key=${key}&image_type=photo&orientation=horizontal&per_page=12`
+      `/?q=${inputValue}&page=${page}&key=${key}&image_type=photo&orientation=horizontal&per_page=12`
     );
 
     if (response.status === 200) {

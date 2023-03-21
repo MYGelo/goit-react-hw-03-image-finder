@@ -5,6 +5,7 @@ import { HiMagnifyingGlass } from 'react-icons/hi2';
 export class Searchbar extends Component {
   state = {
     inputSearch: '',
+    images: [],
   };
 
   handleChange = e => {
@@ -19,6 +20,7 @@ export class Searchbar extends Component {
     } else {
       this.reset();
       this.props.onSubmit(this.state.inputSearch);
+      console.log('searchBar', this.state);
     }
     e.target.reset();
   };

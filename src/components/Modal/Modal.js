@@ -6,6 +6,21 @@ import { createPortal } from 'react-dom';
 const modalRoot = document.querySelector('#modal-root');
 
 export class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyPress);
+  }
+
+  handleKeyPress = event => {
+    // console.log(event.key);
+    if (event.key === 'Escape') {
+      this.props.onCloseModal();
+    }
+  };
+
   handleBackdrop = e => {
     if (e.currentTarget === e.target) {
       this.props.onCloseModal();
