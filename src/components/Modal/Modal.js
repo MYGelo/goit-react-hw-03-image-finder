@@ -8,7 +8,7 @@ const modalRoot = document.querySelector('#modal-root');
 export class Modal extends Component {
   handleBackdrop = e => {
     if (e.currentTarget === e.target) {
-      this.props.onClose();
+      this.props.onCloseModal();
     }
   };
 
@@ -23,5 +23,5 @@ export class Modal extends Component {
 }
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
-  onClose: PropTypes.func.isRequired,
+  onCloseModal: PropTypes.func.isRequired,
 };

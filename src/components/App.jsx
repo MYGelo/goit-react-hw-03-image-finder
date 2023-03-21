@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-// import { ImageGalleryItem } from 'components/ImageGalleryItem';
+
 import { fetchImages } from 'components/Api/Api';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 import { Btn } from './Button/Button';
+
+import { FcCancel } from 'react-icons/fc';
 
 export class App extends Component {
   state = {
@@ -18,6 +20,9 @@ export class App extends Component {
     imgSrc: '',
     imgAlt: '',
   };
+  async componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
 
   async componentDidUpdate(prevProps, prevState) {
     const prevSearch = prevState.inputSearch;
@@ -58,25 +63,23 @@ export class App extends Component {
     this.setState({
       showModal: true,
       imgSrc: e.target.name,
-      imgAlt: e.target.alt,
+      // imgAlt: e.target.alt,
     });
   };
 
   onCloseModal = e => {
-    e.stopPropagation();
     this.setState({
       showModal: false,
-      imgSrc: '',
-      imgAlt: '',
     });
   };
-  onClick = e => {
-    console.log('onClick');
+  onKeyDown = event => {
+    if (event.code === 'Escape') {
+      this.onModalClose();
+    }
   };
 
   render() {
     const { images, isLoading, showModal, imgSrc, imgAlt } = this.state;
-    console.log('showModal:', showModal);
 
     return (
       <>
@@ -93,19 +96,40 @@ export class App extends Component {
             <Loader />
           ) : (
             <React.Fragment>
-              <ImageGallery images={images} onClick={this.onOpenModal} />
-              <button onClick={this.onOpenModal}>1111111</button>
-
+              <ImageGallery
+                images={images}
+                showModal={showModal}
+                onClick={this.onOpenModal}
+              />
               {images.length > 11 ? <Btn onClick={this.onClickMore} /> : null}
             </React.Fragment>
           )}
 
           {showModal ? (
-            <Modal>
-              <button type="button" onClick={this.onCloseModal}>
-                123
+            <Modal onCloseModal={this.onCloseModal}>
+              <button
+                style={{
+                  position: 'relative',
+                  left: '100%',
+
+                  background: 'transparent',
+                  border: 'transparent',
+                }}
+                type="button"
+                onClick={this.onCloseModal}
+              >
+                <FcCancel />
               </button>
-              <img onClick={this.onCloseModal} src={imgSrc} alt={imgAlt} />
+              <img
+                style={{
+                  display: 'flex',
+                  position: 'relative',
+                  width: '100%',
+                  top: '-10px',
+                }}
+                src={imgSrc}
+                alt={imgAlt}
+              ></img>
             </Modal>
           ) : null}
         </div>
@@ -113,3 +137,13 @@ export class App extends Component {
     );
   }
 }
+
+// onCloseModal = () => {
+//   e.stopPropagation();
+//   this.setState({
+//     showModal: false,
+//     imgSrc: '',
+//     imgAlt: '',
+//   });
+//   console.log('onCloseModal');
+// };
