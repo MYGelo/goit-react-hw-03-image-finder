@@ -21,7 +21,7 @@ export class App extends Component {
     imgAlt: '',
   };
   async componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener('keydown', this.handleKeyPress);
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -72,9 +72,11 @@ export class App extends Component {
       showModal: false,
     });
   };
-  onKeyDown = event => {
-    if (event.code === 'Escape') {
-      this.onModalClose();
+
+  handleKeyPress = event => {
+    // console.log(event.key);
+    if (event.key === 'Escape') {
+      this.onCloseModal();
     }
   };
 
