@@ -23,7 +23,6 @@ export class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    console.log(this.state.images);
     if (
       prevState.inputSearch !== this.state.inputSearch ||
       prevState.page !== this.state.page
@@ -31,7 +30,6 @@ export class App extends Component {
       fetchImages(this.state.inputSearch, this.state.page)
         .then(({ images, totalHits }) => {
           if (this.state.page === 1) {
-            console.log(`this.state.page === 1`);
             this.setState({
               images: images,
               isLoading: false,
@@ -39,7 +37,6 @@ export class App extends Component {
             });
           }
           if (this.state.page > 1) {
-            console.log('this.state.page > 1');
             this.setState({
               images: [...prevState.images, ...images],
               isLoading: false,
@@ -49,11 +46,9 @@ export class App extends Component {
         })
         .catch(error => this.setState({ error }));
     }
-    console.log(this.state.page, this.state.images);
   }
 
   onClickMore = async () => {
-    // this.setState(prevState => ({ page: (prevState.page += 1) }));
     this.setState(prevState => {
       return { page: prevState.page + 1 };
     });
