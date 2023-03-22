@@ -53,7 +53,10 @@ export class App extends Component {
   }
 
   onClickMore = async () => {
-    this.setState(prevState => ({ page: (prevState.page += 1) }));
+    // this.setState(prevState => ({ page: (prevState.page += 1) }));
+    this.setState(prevState => {
+      return { page: prevState.page + 1 };
+    });
   };
 
   handleSearchSubmit = currentSearch => {
