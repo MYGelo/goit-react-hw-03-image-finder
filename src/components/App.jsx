@@ -23,22 +23,29 @@ export class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
+    console.log(this.state.images);
     if (
       prevState.inputSearch !== this.state.inputSearch ||
       prevState.page !== this.state.page
     ) {
-      // this.setState({ isLoading: true });
-
       fetchImages(this.state.inputSearch, this.state.page)
         .then(({ images, totalHits }) => {
-          this.setState({
-            images: [...prevState.images.concat(...images)],
-            isLoading: false,
-            showBtnLoadMore: this.state.page < Math.ceil(totalHits / 12),
-          });
+          if (this.state.page === 1) {
+            this.setState({
+              images: images,
+              isLoading: false,
+              showBtnLoadMore: this.state.page < Math.ceil(totalHits / 12),
+            });
+          }
+          if (this.state.page > 1) {
+            this.setState({
+              images: [...prevState.images, ...images],
+              isLoading: false,
+              showBtnLoadMore: this.state.page < Math.ceil(totalHits / 12),
+            });
+          }
         })
         .catch(error => this.setState({ error }));
-      // .finally(this.setState({ isLoading: false }));
     }
     console.log(this.state.page, this.state.images);
   }
@@ -47,15 +54,14 @@ export class App extends Component {
     this.setState(prevState => ({ page: (prevState.page += 1) }));
   };
 
-  handleSearchSubmit = inputSearch => {
-    this.setState({ inputSearch });
-    this.setState({ images: [] });
+  handleSearchSubmit = currentSearch => {
+    this.setState({ inputSearch: currentSearch });
+    this.setState({ images: [], page: 1 });
     this.setState(({ isLoading }) => ({
       isLoading: !isLoading,
     }));
   };
 
-  // handleSearchInput = e => {};
   onOpenModal = e => {
     this.setState({
       showModal: true,
@@ -83,11 +89,7 @@ export class App extends Component {
             color: '#010101',
           }}
         >
-          <Searchbar
-            onSubmit={this.handleSearchSubmit}
-            // search={this.searchInputValue}
-            // onChange={this.handleSearchInput}
-          />
+          <Searchbar onSubmit={this.handleSearchSubmit} />
 
           {isLoading ? (
             <Loader />

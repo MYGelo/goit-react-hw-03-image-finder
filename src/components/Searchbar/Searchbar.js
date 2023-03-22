@@ -10,7 +10,6 @@ export class Searchbar extends Component {
   handleSubmit = e => {
     e.preventDefault();
     window.scrollTo(0, 0);
-    // this.setState(prevState => ({ images: prevState.images }));
     if (this.state.inputSearch.trim() === '') {
       alert('Write correct word');
       return;
