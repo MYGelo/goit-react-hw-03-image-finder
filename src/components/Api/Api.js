@@ -6,9 +6,7 @@ export const fetchImages = async (inputValue, page) => {
   const url = `https://pixabay.com/api/?q=${inputValue}&page=${page}&key=${key}&image_type=photo&orientation=horizontal&per_page=12`;
 
   try {
-    // const request = await axios.get(url);
     const response = await axios.get(url);
-    // const response = JSON.parse(request.request);
 
     const images = response.data.hits.map(hit => {
       return {
@@ -21,9 +19,7 @@ export const fetchImages = async (inputValue, page) => {
     const totalHits = response.data.totalHits;
 
     if (response.status === 200) {
-      console.log({ images, totalHits });
-      // return { images , totalHits };
-      return images;
+      return { images, totalHits };
     }
   } catch (error) {
     return Promise.reject(new Error('Sorry something go wrong ;('));

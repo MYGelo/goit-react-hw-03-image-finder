@@ -27,45 +27,21 @@ export class App extends Component {
       prevState.inputSearch !== this.state.inputSearch ||
       prevState.page !== this.state.page
     ) {
-      this.setState({ isLoading: true });
+      // this.setState({ isLoading: true });
+
       fetchImages(this.state.inputSearch, this.state.page)
-        .then((images, totalHits) => {
+        .then(({ images, totalHits }) => {
           this.setState({
             images: [...prevState.images.concat(...images)],
-            // isLoading: true,
-            showBtnLoadMore:
-              //  this.state.page > Math.ceil(totalHits / 12)
-              true,
+            isLoading: false,
+            showBtnLoadMore: this.state.page < Math.ceil(totalHits / 12),
           });
         })
-        .catch(error => this.setState({ error }))
-        .finally(this.setState({ isLoading: false }));
+        .catch(error => this.setState({ error }));
+      // .finally(this.setState({ isLoading: false }));
     }
-    console.log('app.states:', this.state);
-    console.log(this.state.page, this.state.showBtnLoadMore);
+    console.log(this.state.page, this.state.images);
   }
-  // async componentDidUpdate(prevProps, prevState) {
-  //   if (
-  //     prevState.inputSearch !== this.state.inputSearch ||
-  //     prevState.page !== this.state.page
-  //   ) {
-  //     this.setState({ loader: true });
-  //     try {
-  //       const response = await fetchImages(
-  //         this.state.inputSearch,
-  //         this.state.page
-  //       );
-  //       this.setState(prevState => ({
-  //         images: [...prevState.images, ...response.images],
-  //         showBtnLoadMore: this.state.page < Math.ceil(response.totalHits / 12),
-  //       }));
-  //     } catch (error) {
-  //       this.setState({ error });
-  //     } finally {
-  //       this.setState({ loader: false });
-  //     }
-  //   }
-  // }
 
   onClickMore = async () => {
     this.setState(prevState => ({ page: (prevState.page += 1) }));
@@ -74,9 +50,9 @@ export class App extends Component {
   handleSearchSubmit = inputSearch => {
     this.setState({ inputSearch });
     this.setState({ images: [] });
-    // this.setState(({ isLoading }) => ({
-    //   isLoading: !isLoading,
-    // }));
+    this.setState(({ isLoading }) => ({
+      isLoading: !isLoading,
+    }));
   };
 
   // handleSearchInput = e => {};
@@ -109,8 +85,8 @@ export class App extends Component {
         >
           <Searchbar
             onSubmit={this.handleSearchSubmit}
-            search={this.searchInputValue}
-            onChange={this.handleSearchInput}
+            // search={this.searchInputValue}
+            // onChange={this.handleSearchInput}
           />
 
           {isLoading ? (

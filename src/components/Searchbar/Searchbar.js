@@ -4,30 +4,25 @@ import { HiMagnifyingGlass } from 'react-icons/hi2';
 
 export class Searchbar extends Component {
   handleChange = e => {
-    this.setState({ inputSearch: e.target.value.toLowerCase(), page: 3 });
+    this.setState({ inputSearch: e.target.value.toLowerCase() });
   };
 
   handleSubmit = e => {
     e.preventDefault();
     window.scrollTo(0, 0);
-    this.setState(prevState => ({ images: prevState.images }));
+    // this.setState(prevState => ({ images: prevState.images }));
     if (this.state.inputSearch.trim() === '') {
       alert('Write correct word');
       return;
     } else {
-      this.reset();
       this.props.onSubmit(this.state.inputSearch);
-
-      // this.props.state.images(this.state.images);
-      // console.log('searchBar', this.state);
+      this.reset();
     }
     e.target.reset();
   };
   reset = () => {
     this.setState({
       inputSearch: '',
-      page: 1,
-      images: [],
     });
   };
 
