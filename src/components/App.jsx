@@ -27,39 +27,31 @@ export class App extends Component {
       prevState.inputSearch !== this.state.inputSearch ||
       prevState.page !== this.state.page
     ) {
+      this.setState(({ isLoading }) => ({
+        isLoading: !isLoading,
+      }));
       fetchImages(this.state.inputSearch, this.state.page)
         .then(({ images, totalHits }) => {
-          if (this.state.page === 1) {
-            this.setState({
-              images: images,
-              isLoading: false,
-              showBtnLoadMore: this.state.page < Math.ceil(totalHits / 12),
-            });
-          }
-          if (this.state.page > 1) {
-            this.setState({
+          this.setState(prevState => {
+            return {
               images: [...prevState.images, ...images],
               isLoading: false,
               showBtnLoadMore: this.state.page < Math.ceil(totalHits / 12),
-            });
-          }
+            };
+          });
         })
         .catch(error => this.setState({ error }));
     }
   }
 
-  onClickMore = async () => {
+  onClickMore = () => {
     this.setState(prevState => {
       return { page: prevState.page + 1 };
     });
   };
 
   handleSearchSubmit = currentSearch => {
-    this.setState({ inputSearch: currentSearch });
-    this.setState({ images: [], page: 1 });
-    this.setState(({ isLoading }) => ({
-      isLoading: !isLoading,
-    }));
+    this.setState({ inputSearch: currentSearch, images: [], page: 1 });
   };
 
   onOpenModal = e => {
