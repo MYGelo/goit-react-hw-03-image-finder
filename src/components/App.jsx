@@ -32,13 +32,11 @@ export class App extends Component {
       }));
       fetchImages(this.state.inputSearch, this.state.page)
         .then(({ images, totalHits }) => {
-          this.setState(prevState => {
-            return {
-              images: [...prevState.images, ...images],
-              isLoading: false,
-              showBtnLoadMore: this.state.page < Math.ceil(totalHits / 12),
-            };
-          });
+          this.setState(prevState => ({
+            images: [...prevState.images, ...images],
+            isLoading: false,
+            showBtnLoadMore: this.state.page < Math.ceil(totalHits / 12),
+          }));
         })
         .catch(error => this.setState({ error }));
     }
