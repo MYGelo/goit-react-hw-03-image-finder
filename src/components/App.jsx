@@ -27,42 +27,59 @@ export class App extends Component {
       prevState.inputSearch !== this.state.inputSearch ||
       prevState.page !== this.state.page
     ) {
+      this.setState({ isLoading: true });
       fetchImages(this.state.inputSearch, this.state.page)
         .then((images, totalHits) => {
           this.setState({
-            images: [...prevState.images, ...images],
-            isLoading: false,
+            images: [...prevState.images.concat(...images)],
+            // isLoading: true,
             showBtnLoadMore:
-              // this.state.page < Math.ceil(totalHits / 12)
-              [totalHits],
+              //  this.state.page > Math.ceil(totalHits / 12)
+              true,
           });
         })
-        .catch(error => this.setState({ error }));
+        .catch(error => this.setState({ error }))
+        .finally(this.setState({ isLoading: false }));
     }
-    console.log('this.state.imgages:', this.state.images);
+    console.log('app.states:', this.state);
+    console.log(this.state.page, this.state.showBtnLoadMore);
   }
+  // async componentDidUpdate(prevProps, prevState) {
+  //   if (
+  //     prevState.inputSearch !== this.state.inputSearch ||
+  //     prevState.page !== this.state.page
+  //   ) {
+  //     this.setState({ loader: true });
+  //     try {
+  //       const response = await fetchImages(
+  //         this.state.inputSearch,
+  //         this.state.page
+  //       );
+  //       this.setState(prevState => ({
+  //         images: [...prevState.images, ...response.images],
+  //         showBtnLoadMore: this.state.page < Math.ceil(response.totalHits / 12),
+  //       }));
+  //     } catch (error) {
+  //       this.setState({ error });
+  //     } finally {
+  //       this.setState({ loader: false });
+  //     }
+  //   }
+  // }
 
   onClickMore = async () => {
     this.setState(prevState => ({ page: (prevState.page += 1) }));
-    // this.setState({ page: this.state.page + 1 });
-    // console.log(this.state);
   };
 
   handleSearchSubmit = inputSearch => {
     this.setState({ inputSearch });
-    this.setState({ page: 1 });
     this.setState({ images: [] });
-    this.setState(({ isLoading }) => ({
-      isLoading: !isLoading,
-    }));
+    // this.setState(({ isLoading }) => ({
+    //   isLoading: !isLoading,
+    // }));
   };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
-  };
-
+  // handleSearchInput = e => {};
   onOpenModal = e => {
     this.setState({
       showModal: true,
@@ -78,7 +95,8 @@ export class App extends Component {
   };
 
   render() {
-    const { images, isLoading, showModal, imgSrc, imgAlt } = this.state;
+    const { images, isLoading, showModal, imgSrc, imgAlt, showBtnLoadMore } =
+      this.state;
 
     return (
       <>
@@ -89,7 +107,11 @@ export class App extends Component {
             color: '#010101',
           }}
         >
-          <Searchbar onSubmit={this.handleSearchSubmit} />
+          <Searchbar
+            onSubmit={this.handleSearchSubmit}
+            search={this.searchInputValue}
+            onChange={this.handleSearchInput}
+          />
 
           {isLoading ? (
             <Loader />
@@ -100,7 +122,7 @@ export class App extends Component {
                 showModal={showModal}
                 onClick={this.onOpenModal}
               />
-              {images.length > 11 ? <Btn onClick={this.onClickMore} /> : null}
+              {showBtnLoadMore ? <Btn onClick={this.onClickMore} /> : null}
             </React.Fragment>
           )}
 
