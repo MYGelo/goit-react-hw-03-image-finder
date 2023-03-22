@@ -19,6 +19,7 @@ export class App extends Component {
     showModal: false,
     imgSrc: '',
     imgAlt: '',
+    showBtnLoadMore: '',
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -27,23 +28,30 @@ export class App extends Component {
       prevState.page !== this.state.page
     ) {
       fetchImages(this.state.inputSearch, this.state.page)
-        .then(images => {
+        .then((images, totalHits) => {
           this.setState({
             images: [...prevState.images, ...images],
             isLoading: false,
+            showBtnLoadMore:
+              // this.state.page < Math.ceil(totalHits / 12)
+              [totalHits],
           });
         })
         .catch(error => this.setState({ error }));
     }
+    console.log('this.state.imgages:', this.state.images);
   }
 
   onClickMore = async () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+    this.setState(prevState => ({ page: (prevState.page += 1) }));
     // this.setState({ page: this.state.page + 1 });
+    // console.log(this.state);
   };
 
   handleSearchSubmit = inputSearch => {
     this.setState({ inputSearch });
+    this.setState({ page: 1 });
+    this.setState({ images: [] });
     this.setState(({ isLoading }) => ({
       isLoading: !isLoading,
     }));

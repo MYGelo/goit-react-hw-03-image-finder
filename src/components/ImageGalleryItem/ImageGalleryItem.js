@@ -9,7 +9,9 @@ export const ImageGalleryItem = ({ image, onClick }) => (
         alt={image.tags}
         name={image.largeImageURL}
         className={css.ImageGalleryItem__image}
-      ></img>
+      >
+        {image.totalHits}
+      </img>
     </li>
   </>
 );
