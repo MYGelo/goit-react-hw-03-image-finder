@@ -31,6 +31,7 @@ export class App extends Component {
       fetchImages(this.state.inputSearch, this.state.page)
         .then(({ images, totalHits }) => {
           if (this.state.page === 1) {
+            console.log(`this.state.page === 1`);
             this.setState({
               images: images,
               isLoading: false,
@@ -38,6 +39,7 @@ export class App extends Component {
             });
           }
           if (this.state.page > 1) {
+            console.log('this.state.page > 1');
             this.setState({
               images: [...prevState.images, ...images],
               isLoading: false,
@@ -136,13 +138,3 @@ export class App extends Component {
     );
   }
 }
-
-// onCloseModal = () => {
-//   e.stopPropagation();
-//   this.setState({
-//     showModal: false,
-//     imgSrc: '',
-//     imgAlt: '',
-//   });
-//   console.log('onCloseModal');
-// };
